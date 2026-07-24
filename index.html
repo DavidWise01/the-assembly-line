@@ -1,0 +1,186 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="author" content="David Lee Wise / ROOT0 / TriPod LLC">
+<title>THE ASSEMBLY LINE · OCCUPATIONAL · UD0</title>
+<style>
+*{box-sizing:border-box}
+:root{--fire:#ff7a3c;--fire2:#d85f26;--amber:#e0952a;--amber2:#b0741c;--steel:#3a6079;--steel2:#2b4657;
+  --ink:#2a2620;--dim:#6f675c;--grn:#2e8b57;--panel:rgba(255,253,249,.76);--edge:rgba(216,95,38,.24);--edge2:rgba(216,95,38,.12)}
+html,body{margin:0;height:100%}
+body{background:#f4efe6;color:var(--ink);font:15px/1.55 'Segoe UI',system-ui,-apple-system,Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+#bg{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;display:block}
+.desk{position:relative;z-index:2;max-width:900px;margin:0 auto;padding:24px 16px 56px}
+.dtag{font:600 11px/1 ui-monospace,'Cascadia Code','Segoe UI Mono',monospace;letter-spacing:.32em;text-transform:uppercase;color:var(--fire2)}
+.dtag b{color:var(--fire)}
+h1{margin:.35em 0 .1em;font-size:clamp(26px,4.6vw,42px);font-weight:800;letter-spacing:.01em;color:#241f18}
+.sub{color:var(--dim);max-width:66ch;margin:.2em 0 0}
+.drag{display:inline-block;margin-left:10px;font:700 10px/1 ui-monospace,monospace;letter-spacing:.14em;color:var(--amber2);border:1px solid var(--amber);border-radius:999px;padding:4px 9px;vertical-align:middle;white-space:nowrap}
+.tier{display:inline-flex;gap:6px;align-items:center;margin-top:14px;font:600 11px/1 ui-monospace,monospace;letter-spacing:.14em}
+.chip{padding:5px 10px;border-radius:999px;border:1px solid var(--edge);background:var(--panel)}
+.chip.lit{color:var(--grn);border-color:rgba(46,139,87,.4)}
+.chip.amb{color:var(--amber2);border-color:rgba(176,116,28,.5)}
+.card{margin-top:20px;background:var(--panel);border:1px solid var(--edge);border-radius:16px;backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);box-shadow:0 14px 44px rgba(140,70,20,.13)}
+.stagewrap{padding:14px}
+#stage{width:100%;height:auto;display:block;border-radius:10px;background:rgba(255,252,246,.7);border:1px solid var(--edge2);touch-action:none;cursor:grab}
+#stage:active{cursor:grabbing}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:0 14px 14px}
+.btn{cursor:pointer;border:1px solid var(--edge);background:#fffdf8;color:var(--ink);padding:9px 14px;border-radius:10px;font:600 13px/1 'Segoe UI',system-ui;letter-spacing:.02em;transition:.15s}
+.btn:hover{border-color:var(--fire);box-shadow:0 0 14px rgba(255,122,60,.24)}
+.btn.on{background:linear-gradient(180deg,#ff8a4a,#ec6a2a);border-color:#ec6a2a;color:#fff}
+.rng{display:flex;align-items:center;gap:8px;font:600 12px ui-monospace,monospace;color:var(--dim);background:#fffdf8;border:1px solid var(--edge);border-radius:10px;padding:6px 12px}
+.rng b{color:var(--fire2);min-width:2.4em;text-align:right;display:inline-block}
+input[type=range]{accent-color:var(--fire);width:110px}
+.readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--edge2);border-top:1px solid var(--edge);border-radius:0 0 16px 16px;overflow:hidden}
+.ro{background:var(--panel);padding:11px 14px}
+.ro .k{font:600 10px ui-monospace,monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.ro .v{font:700 19px ui-monospace,monospace;margin-top:3px;color:var(--ink)}
+.ro .v.g{color:var(--grn)} .ro .v.r{color:var(--fire2)} .ro .v.a{color:var(--amber2)} .ro .v.c{color:var(--steel)}
+.honesty{margin-top:22px;display:grid;gap:10px}
+.hz{background:var(--panel);border:1px solid var(--edge);border-left-width:3px;border-radius:10px;padding:12px 15px}
+.hz.lit{border-left-color:var(--grn)} .hz.amb{border-left-color:var(--amber)}
+.hz h4{margin:0 0 4px;font:700 11px ui-monospace,monospace;letter-spacing:.16em}
+.hz.lit h4{color:var(--grn)} .hz.amb h4{color:var(--amber2)}
+.hz p{margin:0;color:#3c362d;font-size:13.5px}
+.law{margin-top:16px;text-align:center;color:var(--dim);font:italic 500 13px/1.5 Georgia,serif}
+.sig{margin-top:26px;text-align:center;color:var(--dim);font:600 11px ui-monospace,monospace;letter-spacing:.14em}
+.sig b{color:var(--ink)}
+#fail{display:none;position:fixed;left:12px;right:12px;bottom:12px;z-index:99;background:#2a1408;border:1px solid var(--fire);color:#ffe0cf;padding:12px;border-radius:8px;font:12px ui-monospace,monospace;white-space:pre-wrap}
+</style></head><body>
+<canvas id="bg"></canvas>
+<div class="desk">
+  <div class="dtag">⚒ <b>OCCUPATIONAL</b> · the working machine · the live fire of the agents</div>
+  <h1>THE ASSEMBLY LINE <span class="drag">✋ DRAG · SLIDE · TAP</span></h1>
+  <p class="sub">A line moves only as fast as its slowest station. <b>Drag workers</b> between the five machines to break the bottleneck, <b>slide</b> the demand you must hit, and the floor recomputes its throughput, its balance, and — by Little's Law — the work-in-progress piling up between the stations.</p>
+  <div class="tier"><span class="chip lit">◆ LIT</span><span class="chip amb">▲ AMBER</span></div>
+  <div class="card">
+    <div class="stagewrap"><canvas id="stage" width="900" height="440"></canvas></div>
+    <div class="controls"><button class="btn" id="auto">⚙ auto-balance</button><button class="btn" id="reset">↺</button><label class="rng">demand <input type="range" id="takt" min="10" max="80" value="40" step="1"><b id="taktv">40</b>/hr</label></div>
+    <div class="readout"><div class="ro"><div class="k">throughput</div><div class="v" id="roThru">—</div></div><div class="ro"><div class="k">bottleneck</div><div class="v" id="roBot">—</div></div><div class="ro"><div class="k">line balance</div><div class="v" id="roEff">—</div></div><div class="ro"><div class="k">WIP (Little's Law)</div><div class="v" id="roWip">—</div></div><div class="ro"><div class="k">vs demand</div><div class="v" id="roMeet">—</div></div></div>
+  </div>
+  <div class="honesty">
+    <div class="hz lit"><h4>◆ LIT — verified / checkable</h4><p>Each station has a fixed work-content (seconds/unit); putting w workers on it divides its cycle time by w. The line's rate is set by the <b>slowest</b> station (the bottleneck): throughput = 3600 / max(cycle time). Line-balance efficiency = Σ(work) / (stations × bottleneck), and by <b>Little's Law</b> the work-in-progress = throughput × flow-time — all computed live as you drag workers around. Real production line-balancing and Little's Law (L = λ·W).</p></div>
+    <div class="hz amb"><h4>▲ AMBER — the figure</h4><p>Five deterministic stations with fixed work-content stand in for a real line (which has variability, breakdowns, setup, and buffers that change WIP). The relationships shown — the bottleneck sets the rate, and L = λ·W — are exact; the specific station times are illustrative.</p></div>
+  </div>
+  <div class="law">OCCUPATIONAL: the fire is lit and the anvil is warm — but the work does not do itself.</div>
+  <div class="sig">David Lee Wise / ROOT0 / TriPod LLC &nbsp;·&nbsp; with <b>AVAN</b></div>
+</div>
+<div id="fail"></div>
+<script>
+window.onerror=function(m,s,l,c,e){var f=document.getElementById('fail');if(f){f.style.display='block';f.textContent='⚠ '+m+' @'+l+':'+c;}};
+</script>
+<script>
+(function(){
+  var cv=document.getElementById('bg'); if(!cv) return;
+  function fallback(){var c=cv.getContext&&cv.getContext('2d');if(!c)return;
+    function f(){var w=cv.width=innerWidth,h=cv.height=innerHeight;var g=c.createRadialGradient(w*.5,h*.42,0,w*.5,h*.42,Math.max(w,h)*.9);g.addColorStop(0,'#f7f2ea');g.addColorStop(1,'#ece4d6');c.fillStyle=g;c.fillRect(0,0,w,h);}f();addEventListener('resize',f);}
+  var gl;try{gl=cv.getContext('webgl',{antialias:true,alpha:false})||cv.getContext('experimental-webgl');}catch(e){}
+  if(!gl){fallback();return;}
+  function gear(teeth,ro,ri,rh){var pts=[],step=Math.PI*2/teeth;
+    for(var t=0;t<teeth;t++){var a=t*step;
+      pts.push([Math.cos(a)*ri,Math.sin(a)*ri]);
+      pts.push([Math.cos(a+step*0.16)*ro,Math.sin(a+step*0.16)*ro]);
+      pts.push([Math.cos(a+step*0.34)*ro,Math.sin(a+step*0.34)*ro]);
+      pts.push([Math.cos(a+step*0.5)*ri,Math.sin(a+step*0.5)*ri]);}
+    var seg=[];for(var i=0;i<pts.length;i++){var b=pts[(i+1)%pts.length];seg.push(pts[i][0],pts[i][1],b[0],b[1]);}
+    for(var i=0;i<28;i++){var a=i/28*6.283,b=(i+1)/28*6.283;seg.push(Math.cos(a)*rh,Math.sin(a)*rh,Math.cos(b)*rh,Math.sin(b)*rh);}
+    for(var k=0;k<5;k++){var a=k/5*6.283;seg.push(Math.cos(a)*rh,Math.sin(a)*rh,Math.cos(a)*ri,Math.sin(a)*ri);}
+    return seg;}
+  var gA=gear(14,1.0,0.74,0.28), gB=gear(10,0.78,0.56,0.22);
+  function buf(arr){var b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(arr),gl.STATIC_DRAW);return b;}
+  var bA=buf(gA), bB=buf(gB);
+  var VS='attribute vec2 p;uniform float asp,ang,sc,offx,offy;void main(){float c=cos(ang),s=sin(ang);vec2 q=vec2(p.x*c-p.y*s,p.x*s+p.y*c);q*=sc;q.x+=offx;q.y+=offy;q.x/=asp;gl_Position=vec4(q,0.0,1.0);}';
+  var FS='precision mediump float;uniform float a;void main(){gl_FragColor=vec4(1.0,0.48,0.20,a);}';
+  function sh(ty,s){var o=gl.createShader(ty);gl.shaderSource(o,s);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))throw gl.getShaderInfoLog(o);return o;}
+  var prog;try{prog=gl.createProgram();gl.attachShader(prog,sh(gl.VERTEX_SHADER,VS));gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,FS));gl.linkProgram(prog);if(!gl.getProgramParameter(prog,gl.LINK_STATUS))throw'link';}catch(e){fallback();return;}
+  var uAsp=gl.getUniformLocation(prog,'asp'),uAng=gl.getUniformLocation(prog,'ang'),uSc=gl.getUniformLocation(prog,'sc'),uOx=gl.getUniformLocation(prog,'offx'),uOy=gl.getUniformLocation(prog,'offy'),uA=gl.getUniformLocation(prog,'a');
+  var aLoc=gl.getAttribLocation(prog,'p');
+  gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+  function drawGear(b,n,ang,sc,ox,oy,al){gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.enableVertexAttribArray(aLoc);gl.vertexAttribPointer(aLoc,2,gl.FLOAT,false,0,0);
+    gl.uniform1f(uAsp,ASP);gl.uniform1f(uAng,ang);gl.uniform1f(uSc,sc);gl.uniform1f(uOx,ox);gl.uniform1f(uOy,oy);gl.uniform1f(uA,al);gl.lineWidth(1);gl.drawArrays(gl.LINES,0,n/2);}
+  var ASP=1,t0=null;
+  function frame(tm){requestAnimationFrame(frame);if(t0===null)t0=tm;var tt=(tm-t0)*0.001;
+    var w=cv.width=innerWidth,h=cv.height=innerHeight;gl.viewport(0,0,w,h);ASP=w/h;
+    gl.clearColor(0.965,0.949,0.925,1.0);gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.useProgram(prog);
+    drawGear(bA,gA.length, tt*0.32, 0.5,-0.46,-0.12, 0.16);
+    drawGear(bB,gB.length, -tt*0.45+0.3, 0.42, 0.42, 0.28, 0.13);
+    drawGear(bB,gB.length, tt*0.4-1.0, 0.3, 0.62,-0.5, 0.10);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+<script>
+(function(){
+  var cv=document.getElementById('stage'); var ctx=cv&&cv.getContext('2d'); if(!ctx)return;
+  var DPR=Math.min(window.devicePixelRatio||1,2);
+  function size(){var w=cv.clientWidth||900;cv.width=Math.round(w*DPR);cv.height=Math.round((w*440/900)*DPR);}
+  size(); addEventListener('resize',size);
+  var env={cv:cv,ctx:ctx,DPR:DPR,W:function(){return cv.width/DPR;},H:function(){return cv.height/DPR;},
+    set:function(id,val,cls){var e=document.getElementById(id);if(e){e.textContent=val;if(cls!=null)e.className='v '+cls;}},
+    evt:function(e){var r=cv.getBoundingClientRect();var sx=(cv.width/DPR)/r.width, sy=(cv.height/DPR)/r.height;
+      var cx=(e.touches?e.touches[0].clientX:e.clientX), cy=(e.touches?e.touches[0].clientY:e.clientY);
+      return {x:(cx-r.left)*sx, y:(cy-r.top)*sy};}};
+  var t0=null, inited=false;
+  function loop(t){requestAnimationFrame(loop);if(t0===null)t0=t;env.t=(t-t0)*0.001;
+    if(!inited&&window.__INST__){inited=true;if(window.__INST__.init)window.__INST__.init(env);}
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    if(window.__INST__&&window.__INST__.draw)window.__INST__.draw(env);}
+  requestAnimationFrame(loop);
+})();
+</script>
+<script>
+  function onDrag(env,pick,move){var handle=null;
+    function down(e){e.preventDefault();var p=env.evt(e);handle=pick(p);if(handle!=null)move(handle,p);}
+    function mv(e){if(handle==null)return;e.preventDefault();move(handle,env.evt(e));}
+    function up(){handle=null;}
+    env.cv.addEventListener('pointerdown',down);env.cv.addEventListener('pointermove',mv);
+    window.addEventListener('pointerup',up);env.cv.addEventListener('touchstart',down,{passive:false});env.cv.addEventListener('touchmove',mv,{passive:false});window.addEventListener('touchend',up);
+  }
+
+(function(){
+  var ST=[70,95,50,80,35]; // work-content secs/unit per station
+  var WK=[]; function seed(){WK=[];var d=[2,2,1,2,1];for(var i=0;i<5;i++)for(var j=0;j<d[i];j++)WK.push({st:i});}
+  seed();
+  var takt=40, ENV;
+  function count(i){var n=0;for(var k=0;k<WK.length;k++)if(WK[k].st===i)n++;return n;}
+  function cyc(i){var w=count(i);return w>0?ST[i]/w:1e9;}
+  function bottleneck(){var m=0,bi=0;for(var i=0;i<5;i++){var ct=cyc(i);if(ct>m){m=ct;bi=i;}}return {t:m,i:bi};}
+  function refresh(){if(!ENV)return;var b=bottleneck();var thru=3600/b.t;
+    var sump=0;for(var i=0;i<5;i++)sump+=ST[i];var eff=sump/(5*b.t);
+    var flow=0;for(var i=0;i<5;i++)flow+=cyc(i);var wip=thru/3600*flow;
+    ENV.set('roThru',isFinite(thru)?thru.toFixed(0)+'/hr':'0 — starved',thru>=takt?'g':'r');
+    ENV.set('roBot','station '+(b.i+1),'r');
+    ENV.set('roEff',(eff*100).toFixed(0)+'%',eff>0.75?'g':(eff>0.5?'a':'r'));
+    ENV.set('roWip',isFinite(wip)?wip.toFixed(1)+' units':'∞','c');
+    ENV.set('roMeet',thru>=takt?'meets demand':'below — add workers',thru>=takt?'g':'r');}
+  function autob(){for(var i=0;i<5;i++)WK[i].st=i; // one each
+    for(var k=5;k<WK.length;k++){var b=bottleneck();WK[k].st=b.i;}refresh();}
+  var x0=40,colW=0,topY=90;
+  function wpos(k){var st=WK[k].st,idx=0;for(var j=0;j<k;j++)if(WK[j].st===st)idx++;
+    return {x:x0+colW*(st+0.5),y:topY+40+idx*26};}
+  window.__INST__={init:function(env){ENV=env;colW=(env.W()-80)/5;
+    document.getElementById('auto').onclick=autob;
+    document.getElementById('reset').onclick=function(){seed();refresh();};
+    document.getElementById('takt').oninput=function(){takt=+this.value;document.getElementById('taktv').textContent=takt;refresh();};
+    onDrag(env,function(p){colW=(env.W()-80)/5;for(var k=0;k<WK.length;k++){var q=wpos(k);if(Math.hypot(p.x-q.x,p.y-q.y)<14)return k;}return null;},
+      function(k,p){colW=(env.W()-80)/5;var st=Math.floor((p.x-x0)/colW);WK[k].st=Math.max(0,Math.min(4,st));refresh();});
+    refresh();},
+   draw:function(env){var c=env.ctx,w=env.W(),h=env.H();c.clearRect(0,0,w,h);colW=(w-80)/5;
+     var b=bottleneck();
+     // conveyor
+     c.strokeStyle='rgba(58,96,121,.4)';c.lineWidth=6;c.beginPath();c.moveTo(x0,topY+18);c.lineTo(w-x0,topY+18);c.stroke();
+     for(var i=0;i<5;i++){var cx=x0+colW*(i+0.5);var isB=i===b.i;
+       // machine box
+       c.fillStyle=isB?'rgba(216,95,38,.16)':'rgba(58,96,121,.10)';c.strokeStyle=isB?'#d85f26':'#3a6079';c.lineWidth=isB?2.5:1.5;
+       c.fillRect(cx-colW*0.4,topY,colW*0.8,26);c.strokeRect(cx-colW*0.4,topY,colW*0.8,26);
+       c.fillStyle='#2a2620';c.font='700 11px ui-monospace,monospace';c.textAlign='center';c.fillText('S'+(i+1)+' · '+ST[i]+'s',cx,topY+17);
+       var ct=cyc(i);c.fillStyle=isB?'#d85f26':'#6f675c';c.font='600 10px ui-monospace,monospace';
+       c.fillText(isFinite(ct)?ct.toFixed(0)+'s/u'+(isB?'  ◄ BOTTLENECK':''):'idle',cx,topY+40);}
+     // workers
+     for(var k=0;k<WK.length;k++){var q=wpos(k);c.fillStyle='rgba(255,122,60,.85)';c.beginPath();c.arc(q.x,q.y,11,0,7);c.fill();
+       c.strokeStyle='#b34d14';c.lineWidth=1.5;c.stroke();c.fillStyle='#fff';c.font='700 11px ui-monospace,monospace';c.textAlign='center';c.fillText('☺',q.x,q.y+4);}
+     c.fillStyle='#6f675c';c.font='600 10px ui-monospace,monospace';c.textAlign='left';c.fillText('drag workers ☺ between stations · slower stations need more hands',x0,h-14);
+   }};
+})();
+</script>
+</body></html>
