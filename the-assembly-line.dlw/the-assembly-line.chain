@@ -1,9 +1,9 @@
 ROOT0-DLW-CHAIN-v1
 index : 1538
 slug  : the-assembly-line
-seal  : 50ac35cbba6a569b78c7bf77162e6d4d8fabd449fe9448589e0d9d2e6f7992f1
-prev  : 2fdce552fc75d24241d0487ed7c15f2225e1d646a0432d9caf1ed6c119d1fb9c
-link  : 11e163ef89a17787bc6908d31fb865987aaf4e6b9a8e353d76c1e953b00b8939
-head  : ef1e6cffb86c401986e408043ee13d82db03495dc2bb5973a74fc431a76fb416
+seal  : e6faf3fd5377584d5a513ee99f3633f9d473d6dba15d5c842b796223226ea40c
+prev  : dc4fb5d5ef08081d99ae2d594a82fa58e9ae0ae755ab40bfdd2e57064bb0e365
+link  : f84b71fe26db0b66e819cbbe702e3a3c8df8c0b25710934df6fd9e66dfff15be
+head  : c4d41afeaef76470528856d54d86cf480a0e1c2fc8ebc60fbb9eb8e442585f2b
 
 — the tether: link = sha256(index|slug|seal|prev). the chain head commits to the whole corpus.
